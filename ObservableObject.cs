@@ -9,16 +9,17 @@ namespace UWPCommon
     public class ObservableObject : INotifyPropertyChanged
     {
         protected CoreDispatcher dispatcher;
-        public ObservableObject(CoreDispatcher dispatcher)
+        public ObservableObject(CoreDispatcher dispatcher = null)
         {
-            this.dispatcher = dispatcher;
+            if (dispatcher != null)
+                this.dispatcher = dispatcher;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected async void RaisepropertyChanged(string propertyName)
         {
-            if (dispatcher.HasThreadAccess)
+            if (dispatcher == null || dispatcher.HasThreadAccess)
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
